@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube Shows</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="gradient-default">
+    <div class="home-grid">
+        <h1>Welcome to Youtube Shows</h1>
+        <p>Enjoy your favorite shows embedded directly from YouTube!</p>
+
+        <div class="button-row">
+            <button class="playlist-card" data-playlist-id="PLbDP9HpqeU_OJlQc0ym7ELpgep5o648VF" onclick="window.location.href='watch.html?list=PLbDP9HpqeU_OJlQc0ym7ELpgep5o648VF'">
+                <img src="" alt="Battle for Dream Island">
+                <span>Battle for Dream Island</span>
+            </button>
+            <button class="playlist-card" data-playlist-id="PLbDP9HpqeU_Ntqqnfprn1RemanAZFn_v8" onclick="window.location.href='watch.html?list=PLbDP9HpqeU_Ntqqnfprn1RemanAZFn_v8'">
+                <img src="" alt="Battle for Dream Island Again">
+                <span>Battle for Dream Island Again</span>
+            </button>
+            <button class="playlist-card" data-playlist-id="PLbDP9HpqeU_MU2AT6S1ugGFVXXGiBIQBb" onclick="window.location.href='watch.html?list=PLbDP9HpqeU_MU2AT6S1ugGFVXXGiBIQBb'">
+                <img src="" alt="Island for Dream Battle">
+                <span>Island for Dream Battle</span>
+            </button>
+            <button class="playlist-card" data-playlist-id="PLYYZmwBmHYl2XvUyLkLTvLALn3V2dp9U-" onclick="window.location.href='watch.html?list=PLYYZmwBmHYl2XvUyLkLTvLALn3V2dp9U-'">
+                <img src="" alt="Battle for BFDI">
+                <span>Battle for BFDI</span>
+            </button>
+            <button class="playlist-card" data-playlist-id="PLamlQlhfsqFO8heTLa7F5l-1jC5gqWMZ0" onclick="window.location.href='watch.html?list=PLamlQlhfsqFO8heTLa7F5l-1jC5gqWMZ0'">
+                <img src="" alt="The Power of Two">
+                <span>The Power of Two</span>
+            </button>
+            <button class="playlist-card" data-playlist-id="PLVh5stRuYi87om5cggOuSbF4RyrEn5DRD" onclick="window.location.href='watch.html?list=PLVh5stRuYi87om5cggOuSbF4RyrEn5DRD'">
+                <img src="" alt="The Amazing Digital Circus">
+                <span>The Amazing Digital Circus</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyCxrDWczWivjYYMTMOfOi_ibuvPNRKTCv0';
+
+        async function loadPlaylistCovers() {
+            const cards = document.querySelectorAll('.playlist-card');
+
+            for (const card of cards) {
+                const playlistId = card.dataset.playlistId;
+                if (!playlistId) continue;
+
+                try {
+                    const res = await fetch(
+                        `https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=${playlistId}&key=${API_KEY}`
+                    );
+                    const data = await res.json();
+                    const playlist = data.items && data.items[0];
+                    const thumbnail = playlist?.snippet?.thumbnails?.maxres?.url
+                        || playlist?.snippet?.thumbnails?.standard?.url
+                        || playlist?.snippet?.thumbnails?.high?.url
+                        || playlist?.snippet?.thumbnails?.medium?.url
+                        || playlist?.snippet?.thumbnails?.default?.url;
+
+                    const img = card.querySelector('img');
+                    if (img && thumbnail) {
+                        img.src = thumbnail;
+                    }
+                } catch (error) {
+                    console.error('Failed to load playlist cover:', error);
+                }
+            }
+        }
+
+        loadPlaylistCovers();
+    </script>
+</body>
+</html>
